@@ -1,6 +1,7 @@
 # Cassie
 
-...Badges...
+[![Build Status](https://travis-ci.org/fmonniot/cassie.svg?branch=master)](https://travis-ci.org/fmonniot/cassie)
+![Project Status](https://img.shields.io/badge/project%20status-experimental-yellowgreen.svg)
 
 When Cassandra meets Cats IO, but cutter.
 

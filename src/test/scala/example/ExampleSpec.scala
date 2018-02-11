@@ -25,11 +25,11 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class ExampleSpec extends FlatSpec with Matchers {
 
-  "The Cassie library" should "have an example" in {
+  "The Cassie library" should "have an example" in pendingUntilFixed {
 
     case class MyItem(a: String)
 
-    implicit val session: Session = ???
+    implicit val session: Session = throw new RuntimeException("We need a real session here")
 
     val testingQuery: IO[Either[cassie.CassieError, Vector[MyItem]]] = for {
       statement <- cql"SELECT * FROM my_keyspace.my_table"

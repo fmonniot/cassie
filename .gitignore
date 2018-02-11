@@ -1,6 +1,7 @@
 .*
 !/.gitignore
 !/.scalafmt.conf
+!/.travis.yml
 .tags*
 .idea*
 *.log
