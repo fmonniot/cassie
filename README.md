@@ -7,7 +7,7 @@ When Cassandra meets Cats IO, but cutter.
 
 Cassie is an open-source library which provides a set of tools
 to integrate the Datastax Cassandra Java Driver into
-the cats` and `cats-effects` world.
+the `cats` and `cats-effects` world.
 
 ```scala
 import cats.effect.IO
