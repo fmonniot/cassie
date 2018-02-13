@@ -18,7 +18,7 @@
 package eu.monniot.cassie.instances
 
 import eu.monniot.cassie.CompositeRowDecoder.pure
-import eu.monniot.cassie.{CompositeRowDecoder, ByNameScalarRowDecoder}
+import eu.monniot.cassie.{ByIndexScalarRowDecoder, ByNameScalarRowDecoder, CompositeRowDecoder}
 import shapeless.{::, HList, HNil, LabelledGeneric, Witness}
 import shapeless.labelled.{FieldType, field}
 
@@ -50,4 +50,7 @@ trait CompositeRowDecoderInstances {
                                              rDecoder: CompositeRowDecoder[R]
                                             ): CompositeRowDecoder[A] =
     pure(row => rDecoder.decode(row).map(gen.from))
+
+  implicit def scalarDecoder[A: ByIndexScalarRowDecoder]: CompositeRowDecoder[A] =
+    pure(row => ByIndexScalarRowDecoder[A].decode(row, 0))
 }

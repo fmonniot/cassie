@@ -17,9 +17,8 @@
 
 package eu.monniot.cassie.syntax
 
-import cats.instances.vector._
-import cats.instances.either._
-import cats.syntax.traverse._
+import cats.data.NonEmptyList
+import cats.syntax.either._
 import com.datastax.driver.core.{ResultSet, Row}
 import eu.monniot.cassie.{CassieError, CompositeRowDecoder}
 
@@ -28,16 +27,56 @@ import scala.language.implicitConversions
 
 
 trait ResultSetSyntax {
-  implicit final def cassieSyntaxResultSet(rs: ResultSet) : ResultSetOps =
+  implicit final def cassieSyntaxResultSet(rs: ResultSet): ResultSetOps =
     new ResultSetOps(rs)
 }
 
 
 class ResultSetOps(val rs: ResultSet) extends AnyVal {
-  // TODO Should either returned an accumulated list of errors, or stop decoding at first error
+
+  /**
+    * Will decode each row of the entire `ResultSet` into a Vector.
+    * This method is fail-fast, which means it will stop at the first error found.
+    *
+    * @tparam A The element a single row will be decoded into
+    * @return either an error or the vector of items in the `ResultSet`
+    */
   def asVectorOf[A: CompositeRowDecoder]: Either[CassieError, Vector[A]] = {
     val decoder = CompositeRowDecoder[A]
-    rs.asScala.map(decoder.decode).toVector.sequence
+    val first: Either[CassieError, Vector[A]] = Right(Vector.empty)
+
+    rs.asScala.foldLeft(first) {
+      case (Left(err), _) => Left(err)
+
+      case (Right(acc), row) =>
+        decoder.decode(row) match {
+          case Right(a) =>
+
+            Right(acc :+ a)
+
+          case Left(err) => Left(err)
+        }
+    }
+  }
+
+  /**
+    * Will decode each row of the entire `ResultSet` into a Vector.
+    * This method accumulates error, which means it will NOT stop at the first error found but will
+    * process the entire `ResultSet` and will returns all errors found (if any).
+    *
+    * @tparam A The element a single row will be decoded into
+    * @return either a list of all errors or the vector of items in the `ResultSet`
+    */
+  def asAccVectorOf[A: CompositeRowDecoder]: Either[NonEmptyList[CassieError], Vector[A]] = {
+    val decoder = CompositeRowDecoder[A]
+    val first: Either[NonEmptyList[CassieError], Vector[A]] = Right(Vector.empty)
+
+    rs.asScala.map(decoder.decode).toVector.foldLeft(first) {
+      case (Left(nel), Left(err)) => Left(err :: nel)
+      case (Right(vector), Right(a)) => Right(vector :+ a)
+      case (nel: Left[_, _], Right(_)) => nel
+      case (Right(_), Left(err)) => Left(NonEmptyList.one(err))
+    }.leftMap(_.reverse)
   }
 
   def ++(rs2: ResultSet): Iterable[Row] = rs.asScala.view ++ rs2.asScala.view
