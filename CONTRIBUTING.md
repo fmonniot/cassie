@@ -58,7 +58,7 @@ must include the following copyright header:
 
 ```
 Copyright (c) 2014-$today.year by François Monniot.
-See the project homepage at: https://francois.monniot.eu/cassie
+See the project homepage at: https://github.com/fmonniot/cassie
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

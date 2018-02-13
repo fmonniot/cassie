@@ -45,8 +45,7 @@ libraryDependencies += "eu.monniot.cassie" %% "cassie" % "0.1.0"
 
 ## Documentation
 
-Cassie documentation will eventually be available at
-[francois.monniot.eu/cassie](https://francois.monniot.eu/cassie).
+Cassie documentation will eventually be available here. Stay tuned :)
 
 ## Contributing
 
