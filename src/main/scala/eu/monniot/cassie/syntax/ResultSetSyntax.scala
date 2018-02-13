@@ -40,5 +40,5 @@ class ResultSetOps(val rs: ResultSet) extends AnyVal {
     rs.asScala.map(decoder.decode).toVector.sequence
   }
 
-  def ++(rs2: ResultSet): Iterable[Row] = ???
+  def ++(rs2: ResultSet): Iterable[Row] = rs.asScala.view ++ rs2.asScala.view
 }
