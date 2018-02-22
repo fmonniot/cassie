@@ -31,13 +31,13 @@ class ExampleSpec extends FlatSpec with Matchers {
 
     implicit val session: Session = throw new RuntimeException("We need a real session here")
 
-    val testingQuery: IO[Either[cassie.CassieError, Vector[MyItem]]] = for {
+    val testingQuery: IO[Either[cassie.CassieException, Vector[MyItem]]] = for {
       statement <- cql"SELECT * FROM my_keyspace.my_table"
       result <- cassie.execute(statement)
       //      more <- fetchMoreResults(result)
     } yield result.asVectorOf[MyItem]
 
-    val testingQuery2: IO[Either[cassie.CassieError, Iterable[MyItem]]] = for {
+    val testingQuery2: IO[Either[cassie.CassieException, Iterable[MyItem]]] = for {
       statement <- cql"SELECT * FROM my_keyspace.my_table"
       result <- cassie.execute(statement)
       more <- cassie.fetchMoreResults(result)

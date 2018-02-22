@@ -20,12 +20,12 @@ implicit val session: Session = ???
 
 case class MyItem(a: String)
 
-val query: IO[Either[cassie.CassieError, Vector[MyItem]]] = for {
+val query: IO[Either[cassie.CassieException, Vector[MyItem]]] = for {
   statement <- cql"SELECT * FROM my_keyspace.my_table"
   result <- cassie.execute(statement)
 } yield result.asVectorOf[MyItem]
 
-val query2: IO[Either[cassie.CassieError, Iterable[MyItem]]] = for {
+val query2: IO[Either[cassie.CassieException, Iterable[MyItem]]] = for {
   statement <- cql"SELECT * FROM my_keyspace.my_table"
   result <- cassie.execute(statement)
   more <- cassie.fetchMoreResults(result)

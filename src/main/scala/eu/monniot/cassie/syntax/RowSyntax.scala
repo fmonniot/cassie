@@ -18,7 +18,7 @@
 package eu.monniot.cassie.syntax
 
 import com.datastax.driver.core.Row
-import eu.monniot.cassie.{CassieError, CompositeRowDecoder}
+import eu.monniot.cassie.{CassieException, CompositeRowDecoder}
 
 import scala.language.implicitConversions
 
@@ -29,5 +29,5 @@ trait RowSyntax {
 
 final class IterableRowOps(val it: Iterable[Row]) extends AnyVal {
   // TODO Should either returned an accumulated list of errors, or stop decoding at first error
-  def asIterableOf[A: CompositeRowDecoder]: Either[CassieError, Iterable[A]] = ???
+  def asIterableOf[A: CompositeRowDecoder]: Either[CassieException, Iterable[A]] = ???
 }

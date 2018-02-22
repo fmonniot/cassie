@@ -63,8 +63,6 @@ class ResultSetSyntaxSpec extends WordSpec with Matchers
       val res = rs.asVectorOf[String]
 
       res shouldBe 'left
-      res.left.get.msg should include("java.lang.Character")
-      res.left.get.msg shouldNot include("Integer")
     }
   }
 
@@ -97,10 +95,7 @@ class ResultSetSyntaxSpec extends WordSpec with Matchers
 
       res shouldBe 'left
       val nel = res.left.get.toList
-      println(nel)
       nel should have size 2
-      nel(0).msg should include("java.lang.Character")
-      nel(1).msg should include("java.lang.Integer")
     }
   }
 

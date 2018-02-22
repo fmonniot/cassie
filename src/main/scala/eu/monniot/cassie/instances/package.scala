@@ -18,6 +18,8 @@
 package eu.monniot.cassie
 
 
+import eu.monniot.cassie.errors.DecoderError
+
 import scala.util.Try
 
 package object instances {
@@ -31,9 +33,9 @@ package object instances {
 
   // Some utilities functions used by the instances
 
-  private[instances] def trying[A](block: => Either[CassieError, A]): Either[CassieError, A] = {
+  private[instances] def trying[A](block: => Either[CassieException, A]): Either[CassieException, A] = {
     Try(block).fold(
-      throwable => Left(CassieError(throwable.getMessage)),
+      throwable => Left(DecoderError(throwable)),
       identity
     )
   }

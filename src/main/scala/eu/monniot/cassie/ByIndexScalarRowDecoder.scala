@@ -21,13 +21,13 @@ import com.datastax.driver.core.GettableByIndexData
 
 
 trait ByIndexScalarRowDecoder[A] {
-  def decode(row: GettableByIndexData, index: Int): Either[CassieError, A]
+  def decode(row: GettableByIndexData, index: Int): Either[CassieException, A]
 }
 
 object ByIndexScalarRowDecoder {
   def apply[A](implicit dec: ByIndexScalarRowDecoder[A]): ByIndexScalarRowDecoder[A] = dec
 
-  def pure[A](func: (GettableByIndexData, Int) => Either[CassieError, A]): ByIndexScalarRowDecoder[A] =
+  def pure[A](func: (GettableByIndexData, Int) => Either[CassieException, A]): ByIndexScalarRowDecoder[A] =
     (row: GettableByIndexData, index: Int) => func(row, index)
 
 }

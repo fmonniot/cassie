@@ -36,6 +36,9 @@ package object cassie {
     extends AllSyntax
     with AllInstances
 
+  // Expose simply the main exception type
+  type CassieException = errors.CassieException
+
   /*
   Some categories:
   - Statement management (CQL, prepared) <- would be interesting to let user pass a case class and use its fields as params
@@ -75,9 +78,5 @@ package object cassie {
     * @param bb the byte buffer containing the data
     */
   final class UnsafeByteBuffer(val bb: ByteBuffer) extends AnyVal
-
-  // TODO Make that a sealed hierarchy. See what doobie is doing before though (or other)
-  case class CassieError(msg: String) extends AnyVal
-
 
 }

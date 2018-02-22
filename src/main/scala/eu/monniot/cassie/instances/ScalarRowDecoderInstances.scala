@@ -18,7 +18,8 @@
 package eu.monniot.cassie.instances
 
 import com.datastax.driver.core.{GettableByIndexData, GettableByNameData}
-import eu.monniot.cassie.{ByIndexScalarRowDecoder, ByNameScalarRowDecoder, CassieError, ScalarRowDecoder, Time, UnsafeByteBuffer}
+import eu.monniot.cassie.errors.CassieException
+import eu.monniot.cassie.{ByIndexScalarRowDecoder, ByNameScalarRowDecoder, ScalarRowDecoder, Time, UnsafeByteBuffer}
 
 import scala.collection.JavaConverters._
 import scala.reflect.ClassTag
@@ -57,10 +58,10 @@ trait ScalarRowDecoderInstances
 trait BooleanInstance {
   implicit val booleanRowDecoder: ScalarRowDecoder[Boolean] =
     new ByNameScalarRowDecoder[Boolean] with ByIndexScalarRowDecoder[Boolean] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, Boolean] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, Boolean] =
         trying(Right(row.getBool(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, Boolean] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, Boolean] =
         trying(Right(row.getBool(index)))
     }
 }
@@ -68,10 +69,10 @@ trait BooleanInstance {
 trait ByteInstance {
   implicit val byteRowDecoder: ScalarRowDecoder[Byte] =
     new ByNameScalarRowDecoder[Byte] with ByIndexScalarRowDecoder[Byte] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, Byte] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, Byte] =
         trying(Right(row.getByte(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, Byte] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, Byte] =
         trying(Right(row.getByte(index)))
     }
 }
@@ -79,10 +80,10 @@ trait ByteInstance {
 trait ShortInstance {
   implicit val shortRowDecoder: ScalarRowDecoder[Short] =
     new ByNameScalarRowDecoder[Short] with ByIndexScalarRowDecoder[Short] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, Short] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, Short] =
         trying(Right(row.getShort(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, Short] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, Short] =
         trying(Right(row.getShort(index)))
     }
 }
@@ -90,10 +91,10 @@ trait ShortInstance {
 trait IntInstance {
   implicit val intRowDecoder: ScalarRowDecoder[Int] =
     new ByNameScalarRowDecoder[Int] with ByIndexScalarRowDecoder[Int] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, Int] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, Int] =
         trying(Right(row.getInt(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, Int] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, Int] =
         trying(Right(row.getInt(index)))
     }
 }
@@ -101,10 +102,10 @@ trait IntInstance {
 trait LongInstance {
   implicit val longRowDecoder: ScalarRowDecoder[Long] =
     new ByNameScalarRowDecoder[Long] with ByIndexScalarRowDecoder[Long] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, Long] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, Long] =
         trying(Right(row.getLong(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, Long] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, Long] =
         trying(Right(row.getLong(index)))
     }
 }
@@ -112,10 +113,10 @@ trait LongInstance {
 trait FloatInstance {
   implicit val floatRowDecoder: ScalarRowDecoder[Float] =
     new ByNameScalarRowDecoder[Float] with ByIndexScalarRowDecoder[Float] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, Float] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, Float] =
         trying(Right(row.getFloat(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, Float] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, Float] =
         trying(Right(row.getFloat(index)))
     }
 }
@@ -123,10 +124,10 @@ trait FloatInstance {
 trait DoubleInstance {
   implicit val doubleRowDecoder: ScalarRowDecoder[Double] =
     new ByNameScalarRowDecoder[Double] with ByIndexScalarRowDecoder[Double] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, Double] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, Double] =
         trying(Right(row.getDouble(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, Double] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, Double] =
         trying(Right(row.getDouble(index)))
     }
 }
@@ -134,10 +135,10 @@ trait DoubleInstance {
 trait StringInstance {
   implicit val stringRowDecoder: ScalarRowDecoder[String] =
     new ByNameScalarRowDecoder[String] with ByIndexScalarRowDecoder[String] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, String] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, String] =
         trying(Right(row.getString(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, String] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, String] =
         trying(Right(row.getString(index)))
     }
 }
@@ -145,10 +146,10 @@ trait StringInstance {
 trait BigIntInstance {
   implicit val bigIntRowDecoder: ScalarRowDecoder[BigInt] =
     new ByNameScalarRowDecoder[BigInt] with ByIndexScalarRowDecoder[BigInt] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, BigInt] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, BigInt] =
         trying(Right(row.getVarint(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, BigInt] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, BigInt] =
         trying(Right(row.getVarint(index)))
     }
 }
@@ -156,10 +157,10 @@ trait BigIntInstance {
 trait BigDecimalInstance {
   implicit val bigDecimalRowDecoder: ScalarRowDecoder[BigDecimal] =
     new ByNameScalarRowDecoder[BigDecimal] with ByIndexScalarRowDecoder[BigDecimal] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, BigDecimal] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, BigDecimal] =
         trying(Right(row.getDecimal(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, BigDecimal] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, BigDecimal] =
         trying(Right(row.getDecimal(index)))
     }
 }
@@ -171,10 +172,10 @@ trait BigDecimalInstance {
 trait JavaDataInstance {
   implicit val javaDateRowDecoder: ScalarRowDecoder[java.util.Date] =
     new ByNameScalarRowDecoder[java.util.Date] with ByIndexScalarRowDecoder[java.util.Date] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, java.util.Date] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, java.util.Date] =
         trying(Right(row.getTimestamp(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, java.util.Date] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, java.util.Date] =
         trying(Right(row.getTimestamp(index)))
     }
 }
@@ -182,10 +183,10 @@ trait JavaDataInstance {
 trait CassLocalDateInstance {
   implicit val cassLocalRowDecoder: ScalarRowDecoder[com.datastax.driver.core.LocalDate] =
     new ByNameScalarRowDecoder[com.datastax.driver.core.LocalDate] with ByIndexScalarRowDecoder[com.datastax.driver.core.LocalDate] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, com.datastax.driver.core.LocalDate] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, com.datastax.driver.core.LocalDate] =
         trying(Right(row.getDate(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, com.datastax.driver.core.LocalDate] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, com.datastax.driver.core.LocalDate] =
         trying(Right(row.getDate(index)))
     }
 }
@@ -193,12 +194,12 @@ trait CassLocalDateInstance {
 trait JavaLocalDateInstance {
   implicit val javaLocalDateRowDecoder: ScalarRowDecoder[java.time.LocalDate] =
     new ByNameScalarRowDecoder[java.time.LocalDate] with ByIndexScalarRowDecoder[java.time.LocalDate] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, java.time.LocalDate] = trying {
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, java.time.LocalDate] = trying {
         val date = row.getDate(name)
         Right(java.time.LocalDate.of(date.getYear, date.getMonth, date.getDay))
       }
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, java.time.LocalDate] = trying {
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, java.time.LocalDate] = trying {
         val date = row.getDate(index)
         Right(java.time.LocalDate.of(date.getYear, date.getMonth, date.getDay))
       }
@@ -208,10 +209,10 @@ trait JavaLocalDateInstance {
 trait TimeInstance {
   implicit val timeRowDecoder: ScalarRowDecoder[Time] =
     new ByNameScalarRowDecoder[Time] with ByIndexScalarRowDecoder[Time] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, Time] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, Time] =
         trying(Right(new Time(row.getTime(name))))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, Time] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, Time] =
         trying(Right(new Time(row.getTime(index))))
     }
 }
@@ -219,10 +220,10 @@ trait TimeInstance {
 trait UnsafeByteBufferInstance {
   implicit val unsafeByteBufferRowDecoder: ScalarRowDecoder[UnsafeByteBuffer] =
     new ByNameScalarRowDecoder[UnsafeByteBuffer] with ByIndexScalarRowDecoder[UnsafeByteBuffer] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, UnsafeByteBuffer] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, UnsafeByteBuffer] =
         trying(Right(new UnsafeByteBuffer(row.getBytesUnsafe(name))))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, UnsafeByteBuffer] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, UnsafeByteBuffer] =
         trying(Right(new UnsafeByteBuffer(row.getBytesUnsafe(index))))
     }
 }
@@ -230,10 +231,10 @@ trait UnsafeByteBufferInstance {
 trait ByteBufferInstance {
   implicit val byteBufferRowDecoder: ScalarRowDecoder[java.nio.ByteBuffer] =
     new ByNameScalarRowDecoder[java.nio.ByteBuffer] with ByIndexScalarRowDecoder[java.nio.ByteBuffer] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, java.nio.ByteBuffer] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, java.nio.ByteBuffer] =
         trying(Right(row.getBytes(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, java.nio.ByteBuffer] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, java.nio.ByteBuffer] =
         trying(Right(row.getBytes(index)))
     }
 }
@@ -241,10 +242,10 @@ trait ByteBufferInstance {
 trait UUIDInstance {
   implicit val uuidRowDecoder: ScalarRowDecoder[java.util.UUID] =
     new ByNameScalarRowDecoder[java.util.UUID] with ByIndexScalarRowDecoder[java.util.UUID] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, java.util.UUID] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, java.util.UUID] =
         trying(Right(row.getUUID(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, java.util.UUID] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, java.util.UUID] =
         trying(Right(row.getUUID(index)))
     }
 }
@@ -252,10 +253,10 @@ trait UUIDInstance {
 trait INetAddressInstance {
   implicit val iNetAddressRowDecoder: ScalarRowDecoder[java.net.InetAddress] =
     new ByNameScalarRowDecoder[java.net.InetAddress] with ByIndexScalarRowDecoder[java.net.InetAddress] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, java.net.InetAddress] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, java.net.InetAddress] =
         trying(Right(row.getInet(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, java.net.InetAddress] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, java.net.InetAddress] =
         trying(Right(row.getInet(index)))
     }
 }
@@ -263,10 +264,10 @@ trait INetAddressInstance {
 trait UDTValueInstance {
   implicit val udtValueRowDecoder: ScalarRowDecoder[com.datastax.driver.core.UDTValue] =
     new ByNameScalarRowDecoder[com.datastax.driver.core.UDTValue] with ByIndexScalarRowDecoder[com.datastax.driver.core.UDTValue] {
-      override def decode(row: GettableByNameData, name: String): Either[CassieError, com.datastax.driver.core.UDTValue] =
+      override def decode(row: GettableByNameData, name: String): Either[CassieException, com.datastax.driver.core.UDTValue] =
         trying(Right(row.getUDTValue(name)))
 
-      override def decode(row: GettableByIndexData, index: Int): Either[CassieError, com.datastax.driver.core.UDTValue] =
+      override def decode(row: GettableByIndexData, index: Int): Either[CassieException, com.datastax.driver.core.UDTValue] =
         trying(Right(row.getUDTValue(index)))
     }
 }

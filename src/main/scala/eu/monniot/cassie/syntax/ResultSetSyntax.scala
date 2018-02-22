@@ -20,7 +20,7 @@ package eu.monniot.cassie.syntax
 import cats.data.NonEmptyList
 import cats.syntax.either._
 import com.datastax.driver.core.{ResultSet, Row}
-import eu.monniot.cassie.{CassieError, CompositeRowDecoder}
+import eu.monniot.cassie.{CassieException, CompositeRowDecoder}
 
 import scala.collection.JavaConverters._
 import scala.language.implicitConversions
@@ -41,9 +41,9 @@ class ResultSetOps(val rs: ResultSet) extends AnyVal {
     * @tparam A The element a single row will be decoded into
     * @return either an error or the vector of items in the `ResultSet`
     */
-  def asVectorOf[A: CompositeRowDecoder]: Either[CassieError, Vector[A]] = {
+  def asVectorOf[A: CompositeRowDecoder]: Either[CassieException, Vector[A]] = {
     val decoder = CompositeRowDecoder[A]
-    val first: Either[CassieError, Vector[A]] = Right(Vector.empty)
+    val first: Either[CassieException, Vector[A]] = Right(Vector.empty)
 
     rs.asScala.foldLeft(first) {
       case (Left(err), _) => Left(err)
@@ -67,9 +67,9 @@ class ResultSetOps(val rs: ResultSet) extends AnyVal {
     * @tparam A The element a single row will be decoded into
     * @return either a list of all errors or the vector of items in the `ResultSet`
     */
-  def asAccVectorOf[A: CompositeRowDecoder]: Either[NonEmptyList[CassieError], Vector[A]] = {
+  def asAccVectorOf[A: CompositeRowDecoder]: Either[NonEmptyList[CassieException], Vector[A]] = {
     val decoder = CompositeRowDecoder[A]
-    val first: Either[NonEmptyList[CassieError], Vector[A]] = Right(Vector.empty)
+    val first: Either[NonEmptyList[CassieException], Vector[A]] = Right(Vector.empty)
 
     rs.asScala.map(decoder.decode).toVector.foldLeft(first) {
       case (Left(nel), Left(err)) => Left(err :: nel)

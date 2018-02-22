@@ -21,12 +21,12 @@ import com.datastax.driver.core.Row
 
 
 trait CompositeRowDecoder[A] {
-  def decode(row: Row): Either[CassieError, A]
+  def decode(row: Row): Either[CassieException, A]
 }
 
 object CompositeRowDecoder {
 
   def apply[A](implicit dec: CompositeRowDecoder[A]): CompositeRowDecoder[A] = dec
 
-  def pure[A](func: (Row) => Either[CassieError, A]): CompositeRowDecoder[A] = (row: Row) => func(row)
+  def pure[A](func: (Row) => Either[CassieException, A]): CompositeRowDecoder[A] = (row: Row) => func(row)
 }

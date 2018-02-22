@@ -17,17 +17,17 @@
 
 package eu.monniot.cassie
 
-import com.datastax.driver.core.GettableByNameData
+/**
+  * Module defining the type of exceptions representing unmet expectations.
+  * These typically indicate a problem with the schema, with type mapping, with driver compliance, and so on.
+  * The intent is that they be as fine-grained as reasonable for diagnostic purposes,
+  * but it is not expected that the application should be able to handle them in any meaningful way.
+  */
+package object errors {
 
+  sealed abstract class CassieException(msg: String, cause: Throwable) extends Exception(msg, cause)
 
-trait ByNameScalarRowDecoder[A] {
-  def decode(row: GettableByNameData, name: String): Either[CassieException, A]
-}
-
-object ByNameScalarRowDecoder {
-  def apply[A](implicit dec: ByNameScalarRowDecoder[A]): ByNameScalarRowDecoder[A] = dec
-
-  def pure[A](func: (GettableByNameData, String) => Either[CassieException, A]): ByNameScalarRowDecoder[A] =
-    (row: GettableByNameData, name: String) => func(row, name)
+  final case class DecoderError(cause: Throwable)
+    extends CassieException("An error occurred while decoding a Cassandra result", cause)
 
 }
