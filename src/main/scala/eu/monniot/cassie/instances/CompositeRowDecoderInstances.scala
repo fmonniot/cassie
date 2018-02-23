@@ -19,10 +19,10 @@ package eu.monniot.cassie.instances
 
 import eu.monniot.cassie.CompositeRowDecoder.pure
 import eu.monniot.cassie.{ByIndexScalarRowDecoder, ByNameScalarRowDecoder, CompositeRowDecoder}
-import shapeless.{::, HList, HNil, LabelledGeneric, Witness}
+import shapeless.{::, Generic, HList, HNil, LabelledGeneric, Witness}
 import shapeless.labelled.{FieldType, field}
 
-trait CompositeRowDecoderInstances {
+trait CompositeRowDecoderInstances extends LowPrioritiesCompositeInstances {
 
   implicit val hNilDecoder: CompositeRowDecoder[HNil] =
     pure(_ => Right(HNil))
@@ -33,7 +33,7 @@ trait CompositeRowDecoderInstances {
                                                      ): CompositeRowDecoder[FieldType[Key, Value]] =
     pure(row => decoder.decode(row, witness.value.name).map(field[Key](_)))
 
-  implicit def hListParser[Key <: Symbol, Value, Tail <: HList](implicit
+  implicit def labelledHListParser[Key <: Symbol, Value, Tail <: HList](implicit
                                                                 hDecoder: CompositeRowDecoder[FieldType[Key, Value]],
                                                                 tDecoder: CompositeRowDecoder[Tail]
                                                                ): CompositeRowDecoder[FieldType[Key, Value] :: Tail] = {
@@ -45,7 +45,7 @@ trait CompositeRowDecoderInstances {
     }
   }
 
-  implicit def genericDecoder[A, R <: HList](implicit
+  implicit def labelledGenericDecoder[A, R <: HList](implicit
                                              gen: LabelledGeneric.Aux[A, R],
                                              rDecoder: CompositeRowDecoder[R]
                                             ): CompositeRowDecoder[A] =
@@ -53,4 +53,26 @@ trait CompositeRowDecoderInstances {
 
   implicit def scalarDecoder[A: ByIndexScalarRowDecoder]: CompositeRowDecoder[A] =
     pure(row => ByIndexScalarRowDecoder[A].decode(row, 0))
+}
+
+trait LowPrioritiesCompositeInstances {
+  // With this approach, we can't convert automatically C* tuple to scala tuple
+  // See if this a problem in the long run or if we can live with it
+  implicit def hListParser[Value, Tail <: HList](implicit
+                                                 hDecoder: CompositeRowDecoder[Value],
+                                                 tDecoder: CompositeRowDecoder[Tail]
+                                                ): CompositeRowDecoder[Value :: Tail] = {
+    pure { row =>
+      for {
+        h <- hDecoder.decode(row)
+        t <- tDecoder.decode(row)
+      } yield h :: t
+    }
+  }
+
+  implicit def genericDecoder[A, R <: HList](implicit
+                                             gen: Generic.Aux[A, R],
+                                             rDecoder: CompositeRowDecoder[R]
+                                            ): CompositeRowDecoder[A] =
+    pure(row => rDecoder.decode(row).map(gen.from))
 }

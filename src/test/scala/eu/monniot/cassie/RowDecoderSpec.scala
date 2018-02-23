@@ -114,8 +114,25 @@ class RowDecoderSpec extends WordSpec with Matchers {
     }
 
     "be derived for generic products" in {
-      CompositeRowDecoder[Z]
       CompositeRowDecoder[S.type]
+      implicit val crdZ1 = CompositeRowDecoder[Z1]
+      implicit val crdZ2 = CompositeRowDecoder[Z2]
+
+      CompositeRowDecoder[(Z1, Z2)]
+    }
+
+    "decode a row based on a generic product" in {
+      import eu.monniot.cassie.helpers._
+
+      val row = makeRow(Map("i" -> 1, "s" -> "string", "l" -> 2l, "b" -> true))
+
+      implicit val crdZ1 = CompositeRowDecoder[Z1]
+      implicit val crdZ2 = CompositeRowDecoder[Z2]
+
+      val dec = CompositeRowDecoder[(Z1, Z2)]
+
+      dec.decode(row) shouldBe 'right
+      println(dec.decode(row))
     }
   }
 
@@ -131,7 +148,9 @@ object RowDecoderSpec {
 
   final case class Q(x: String)
 
-  final case class Z(i: Int, s: String)
+  final case class Z1(i: Int, s: String)
+
+  final case class Z2(l: Long, b: Boolean)
 
   object S
 
