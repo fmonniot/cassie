@@ -8,6 +8,10 @@ scala:
 jdk:
   - oraclejdk8
 
+before_install:
+  - curl -L -o /usr/local/bin/mill https://github.com/lihaoyi/mill/releases/download/0.1.1/0.1.1
+  - chmod +x /usr/local/bin/mill
+
 cache:
   directories:
   - $HOME/.sbt/0.13/dependency
