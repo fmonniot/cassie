@@ -10,11 +10,19 @@ jdk:
 
 cache:
   directories:
-    - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot
+  - $HOME/.sbt/0.13/dependency
+  - $HOME/.sbt/boot/scala*
+  - $HOME/.sbt/launchers
+  - $HOME/.ivy2/cache
+  - $HOME/.coursier
+
+matrix:
+  include:
+  - env: SCALA_VERSION=2.11.12
+  - env: SCALA_VERSION=2.12.4
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION test
+  - mill cassie[$SCALA_VERSION].test
 
 before_cache:
   # Cleanup the cached directories to avoid unnecessary cache updates

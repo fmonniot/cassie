@@ -10,3 +10,4 @@ target/
 /.lib/
 project/target/
 .classpath
+out/
