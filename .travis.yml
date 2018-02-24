@@ -22,13 +22,8 @@ cache:
   - $HOME/.coursier
   - $HOME/.bin
 
-matrix:
-  include:
-  - env: SCALA_VERSION=2.11.12
-  - env: SCALA_VERSION=2.12.4
-
 script:
-  - mill cassie[$SCALA_VERSION].test
+  - mill cassie[$TRAVIS_SCALA_VERSION].test
 
 before_cache:
   # Cleanup the cached directories to avoid unnecessary cache updates

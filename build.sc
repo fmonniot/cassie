@@ -3,7 +3,7 @@ import mill._
 import mill.scalalib._
 import mill.scalalib.publish.{PomSettings, License, Developer, SCM}
 
-object cassie extends Cross[CassieModule]("2.12.4", "2.11.12")
+object cassie extends Cross[CassieModule]("2.12.4")
 
 class CassieModule(val crossScalaVersion: String) extends CrossSbtModule with PublishModule {
   def artifactName = "cassie"
